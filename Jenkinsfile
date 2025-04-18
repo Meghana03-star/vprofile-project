@@ -5,7 +5,7 @@ pipeline {
         NEXUS_VERSION = 'nexus3'
         NEXUS_PROTOCOL = 'http'
         NEXUS_URL = '172.31.57.160:8081'
-        NEXUS_REPO = 'maven-releases'
+        NEXUS_REPO = 'megha'
         GROUP_ID = 'com.example'
         CREDENTIALS_ID = '1' // Use your actual Jenkins credential ID
         PROJECT_NAME = 'my-service'

@@ -9,7 +9,7 @@ pipeline {
         GROUP_ID         = 'com.visualpathit'         // From pom.xml
         CREDENTIALS_ID   = '1'                         // Jenkins Credentials ID
         PROJECT_NAME     = 'vprofile'                 // From pom.xml (artifactId)
-        VERSION          = '1.0.0'                     // Optional - can be dynamic
+        VERSION          = "$(env.BUILD_ID)"                    // Optional - can be dynamic
     }
 
     stages {

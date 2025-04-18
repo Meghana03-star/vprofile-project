@@ -5,7 +5,7 @@ pipeline {
         NEXUS_VERSION    = 'nexus3'
         NEXUS_PROTOCOL   = 'http'
         NEXUS_URL        = '172.31.57.160:8081'       // Replace with your Nexus IP and port
-        NEXUS_REPO       = 'megha'                    // Nexus Repository name
+        NEXUS_REPO       = 'megs'                    // Nexus Repository name
         GROUP_ID         = 'com.visualpathit'         // From pom.xml
         CREDENTIALS_ID   = '1'                         // Jenkins Credentials ID
         PROJECT_NAME     = 'vprofile'                 // From pom.xml (artifactId)

@@ -2,14 +2,14 @@ pipeline {
     agent any
 
     environment {
-        NEXUS_VERSION = 'nexus3'
-        NEXUS_PROTOCOL = 'http'
-        NEXUS_URL = '172.31.57.160:8081'
-        NEXUS_REPO = 'megha'
-        GROUP_ID = 'com.visualpathit'
-        CREDENTIALS_ID = '1' // Use your actual Jenkins credential ID
-        PROJECT_NAME = 'vprofile'
-        VERSION = '1.0.0' // You can also make this dynamic if needed
+        NEXUS_VERSION    = 'nexus3'
+        NEXUS_PROTOCOL   = 'http'
+        NEXUS_URL        = '172.31.57.160:8081'       // Replace with your Nexus IP and port
+        NEXUS_REPO       = 'megha'                    // Nexus Repository name
+        GROUP_ID         = 'com.visualpathit'         // From pom.xml
+        CREDENTIALS_ID   = '1'                         // Jenkins Credentials ID
+        PROJECT_NAME     = 'vprofile'                 // From pom.xml (artifactId)
+        VERSION          = '1.0.0'                     // Optional - can be dynamic
     }
 
     stages {
@@ -19,37 +19,34 @@ pipeline {
             }
         }
 
-        // stage('Find JAR') {
-        //     steps {
-        //         script {
-        //             // Finds the first JAR in target folder
-        //             JAR_FILE = sh(script: "ls target/*.war | head -n 1", returnStdout: true).trim()
-        //             echo "Found JAR: ${JAR_FILE}"
-        //         }
-        //     }
-        // }
-def warFile = sh(script: "ls target/*.war | head -n 1", returnStdout: true).trim()
-        def version = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
-
-        stage('Upload to Nexus') {
+        stage('Find WAR and Upload to Nexus') {
             steps {
-                nexusArtifactUploader(
-                    nexusVersion: "${NEXUS_VERSION}",
-                    protocol: "${NEXUS_PROTOCOL}",
-                    nexusUrl: "${NEXUS_URL}",
-                    groupId: "${GROUP_ID}",
-                    version: "${version}",
-                    repository: "${NEXUS_REPO}",
-                    credentialsId: "${CREDENTIALS_ID}",
-                    artifacts: [
-                        [
-                            artifactId: "${PROJECT_NAME}",
-                            classifier: '',
-                            file: "${warFile}",
-                            type: 'war'
+                script {
+                    // Dynamically find the WAR file
+                    def warFile = sh(script: "ls target/*.war | head -n 1", returnStdout: true).trim()
+
+                    // Echo to confirm the WAR file
+                    echo "Found WAR File: ${warFile}"
+
+                    // Upload to Nexus
+                    nexusArtifactUploader(
+                        nexusVersion: "${NEXUS_VERSION}",
+                        protocol: "${NEXUS_PROTOCOL}",
+                        nexusUrl: "${NEXUS_URL}",
+                        groupId: "${GROUP_ID}",
+                        version: "${VERSION}",
+                        repository: "${NEXUS_REPO}",
+                        credentialsId: "${CREDENTIALS_ID}",
+                        artifacts: [
+                            [
+                                artifactId: "${PROJECT_NAME}",
+                                classifier: '',
+                                file: "${warFile}",
+                                type: 'war'
+                            ]
                         ]
-                    ]
-                )
+                    )
+                }
             }
         }
     }

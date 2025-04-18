@@ -29,6 +29,8 @@ pipeline {
         //     }
         // }
 def warFile = sh(script: "ls target/*.war | head -n 1", returnStdout: true).trim()
+        def version = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
+
         stage('Upload to Nexus') {
             steps {
                 nexusArtifactUploader(
@@ -36,7 +38,7 @@ def warFile = sh(script: "ls target/*.war | head -n 1", returnStdout: true).trim
                     protocol: "${NEXUS_PROTOCOL}",
                     nexusUrl: "${NEXUS_URL}",
                     groupId: "${GROUP_ID}",
-                    version: "${VERSION}",
+                    version: "${version}",
                     repository: "${NEXUS_REPO}",
                     credentialsId: "${CREDENTIALS_ID}",
                     artifacts: [

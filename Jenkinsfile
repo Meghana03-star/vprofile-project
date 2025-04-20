@@ -72,11 +72,7 @@ pipeline {
             }
           }
         }
-	    
- 
-                }
-            
-        
+                
         stage('Find WAR and Upload to Nexus') {
             steps {
                 script {
@@ -108,4 +104,4 @@ pipeline {
             }
         }
     }
-
+}
